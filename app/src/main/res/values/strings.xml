@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">To-do List</string>
+    <string name="task">Nhiệm Vụ</string>
+    <string name="calendar">Lịch</string>
+    <string name="mine">Của tôi</string>
+    <string name="star_task">Star Task</string>
+    <string name="category">Thể loại</string>
+    <string name="donations">Quyên góp</string>
+    <string name="feedback">Phản hồi</string>
+    <string name="question">Hỏi đáp</string>
+    <string name="setting">Cài đặt</string>
+    <string name="banner_app">Banner app</string>
+</resources>
