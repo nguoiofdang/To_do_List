@@ -9,6 +9,11 @@
         android:title="@string/star_task"/>
 
     <item
+        android:id="@+id/finishTaskFragment"
+        android:icon="@drawable/outline_download_done_black_48"
+        android:title="@string/finish_task"/>
+
+    <item
         android:id="@+id/category"
         android:icon="@drawable/outline_category_black_48"
         android:title="@string/category"/>

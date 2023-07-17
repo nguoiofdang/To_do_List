@@ -3,7 +3,9 @@ package com.example.to_dolist.ui
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -12,71 +14,45 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.to_dolist.R
 import com.example.to_dolist.databinding.ActivityMainBinding
+import com.example.to_dolist.db.Database
+import com.example.to_dolist.repository.Repository
+import com.example.to_dolist.viewmodel.TaskViewModel
+import com.example.to_dolist.viewmodel.TaskViewModelProviderFactory
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityMainBinding
+    lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
+    private lateinit var navController: NavController
+    private lateinit var drawerLayout: DrawerLayout
+    lateinit var viewModel: TaskViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        Log.e("GiaHuy", "onCreateActivity")
+        //Create ViewModel
+        val repository = Repository(Database.invoke(this))
+        val taskViewModelProviderFactory = TaskViewModelProviderFactory(repository)
+        viewModel = ViewModelProvider(this, taskViewModelProviderFactory)[TaskViewModel::class.java]
 
+        //Setup Toolbar, BottomNavigation, NavigationView
         setSupportActionBar(binding.toolBar)
+        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
+        navController = navHostFragment.navController
+        drawerLayout = binding.drawerLayout
         configNavigation()
-
-        binding.ivOpenDrawer.setOnClickListener {
-            binding.drawerLayout.openDrawer(binding.navView)
-        }
-
-//        binding.navView.setNavigationItemSelectedListener { menuItem ->
-//            when(menuItem.itemId) {
-//                R.id.starTaskFragment -> {
-//                    binding.toolBar.visibility = View.VISIBLE
-//                    binding.layoutBottom.visibility = View.GONE
-//                    true
-//                }
-//                else -> false
-//            }
-//        }
-
-
-    }
-
-
-    override fun onStart() {
-        super.onStart()
-        Log.e("GiaHuy", "onStart Activity")
-    }
-
-    override fun onResume() {
-        super.onResume()
-        Log.e("GiaHuy", "onResume Activity")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        Log.e("GiaHuy", "onPause Activity")
-    }
-
-    override fun onStop() {
-        super.onStop()
-        Log.e("GiaHuy", "onStop Activity")
     }
 
     override fun onSupportNavigateUp(): Boolean {
+
         val navController = findNavController(R.id.navHostFragment)
-        return navController.navigateUp(appBarConfiguration) ||super.onSupportNavigateUp()
+        return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 
     private fun configNavigation() {
-        val drawerLayout = binding.drawerLayout
         val navView = binding.navView
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment
-        val navController = navHostFragment.navController
         val bottomNavigation = binding.bottomNavigation
         appBarConfiguration = AppBarConfiguration(
             setOf(

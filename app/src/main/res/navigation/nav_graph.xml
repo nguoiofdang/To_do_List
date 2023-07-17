@@ -9,12 +9,24 @@
         android:id="@+id/taskFragment"
         android:name="com.example.to_dolist.ui.fragments.TaskFragment"
         android:label="@string/task"
-        tools:layout="@layout/fragment_task" />
+        tools:layout="@layout/fragment_task">
+        <action
+            android:id="@+id/action_taskFragment_to_itemTask"
+            app:destination="@id/itemTask"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
     <fragment
         android:id="@+id/calendarFragment"
         android:name="com.example.to_dolist.ui.fragments.CalendarFragment"
         android:label="@string/calendar"
-        tools:layout="@layout/fragment_calendar" />
+        tools:layout="@layout/fragment_calendar" >
+        <action
+            android:id="@+id/action_calendarFragment_to_itemTask"
+            app:destination="@id/itemTask" />
+    </fragment>
     <fragment
         android:id="@+id/meFragment"
         android:name="com.example.to_dolist.ui.fragments.MeFragment"
@@ -24,5 +36,28 @@
         android:id="@+id/starTaskFragment"
         android:name="com.example.to_dolist.ui.fragments.StarTaskFragment"
         android:label="StarTaskFragment"
-        tools:layout="@layout/fragment_star_task"/>
+        tools:layout="@layout/fragment_star_task">
+        <action
+            android:id="@+id/action_starTaskFragment_to_itemTask"
+            app:destination="@id/itemTask"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/itemTask"
+        android:name="com.example.to_dolist.ui.fragments.ItemTaskFragment"
+        android:label="ItemTask"
+        tools:layout="@layout/fragment_item_task" />
+    <fragment
+        android:id="@+id/finishTaskFragment"
+        android:name="com.example.to_dolist.ui.fragments.FinishTaskFragment"
+        android:label="FinishTaskFragment"
+        tools:layout="@layout/fragment_finish_task" >
+        <action
+            android:id="@+id/action_finishTaskFragment_to_itemTask"
+            app:destination="@id/itemTask" />
+    </fragment>
+
 </navigation>

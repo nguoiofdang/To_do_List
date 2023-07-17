@@ -10,4 +10,10 @@
     <string name="question">Hỏi đáp</string>
     <string name="setting">Cài đặt</string>
     <string name="banner_app">Banner app</string>
+    <string name="add_task">add task</string>
+    <string name="new_task">Nhập nhiệm vụ mới</string>
+    <string name="finish_task">Nhiệm vụ hoàn thành</string>
+    <string name="TextEmptyTaskOnDay">Không có nhiệm vụ nào trong ngày.</string>
+    <string name="title">Title</string>
+    <string name="description">Description</string>
 </resources>
