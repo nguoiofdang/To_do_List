@@ -16,4 +16,9 @@
     <string name="TextEmptyTaskOnDay">Không có nhiệm vụ nào trong ngày.</string>
     <string name="title">Title</string>
     <string name="description">Description</string>
+    <string name="alarmTime">Thời gian báo thức</string>
+    <string name="repeat_task">Lặp lại nhiệm vụ</string>
+    <string name="chanel_name_pin_reminder">PinReminder</string>
+    <string name="channel_description_pin_reminder">Description</string>
+    <string name="toggle_button_set_time">Không thông báo</string>
 </resources>

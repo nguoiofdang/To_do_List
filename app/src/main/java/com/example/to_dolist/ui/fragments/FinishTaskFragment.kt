@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.to_dolist.R
 import com.example.to_dolist.adapters.AdapterRecycleView
 import com.example.to_dolist.databinding.ActivityMainBinding
 import com.example.to_dolist.databinding.FragmentFinishTaskBinding
 import com.example.to_dolist.ui.MainActivity
+import com.example.to_dolist.utils.Constance.TAG_INTENT_TASK
 import com.example.to_dolist.viewmodel.TaskViewModel
 
 class FinishTaskFragment : Fragment(R.layout.fragment_finish_task) {
@@ -42,9 +44,11 @@ class FinishTaskFragment : Fragment(R.layout.fragment_finish_task) {
             ))
         }
 
-        adapterRecycleView.setOnItemClickListener { task ->
+        adapterRecycleView.setOnClickItemListener { task ->
             val bundle = Bundle()
-            bundle.putSerializable("task", task)
+            bundle.putSerializable(TAG_INTENT_TASK, task)
+            bundle.putBoolean("isFinish", true)
+            findNavController().navigate(R.id.action_finishTaskFragment_to_itemTask, bundle)
         }
 
         adapterRecycleView.setOnClickStarListener { task ->

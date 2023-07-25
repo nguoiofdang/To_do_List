@@ -8,12 +8,14 @@ import androidx.room.PrimaryKey
 data class Task(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    var titleTask: String? = null,
+    var titleTask: String = "",
+    var description: String = "",
     var hour: Int? = null,
     var minute: Int? = null,
     var day: Int? = null,
     var month: Int? = null,
     var year: Int? = null,
+    var alarm: Boolean = false,
     var finish: Boolean = false,
     var star: Boolean = false
 ) : java.io.Serializable

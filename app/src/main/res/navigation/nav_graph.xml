@@ -22,7 +22,7 @@
         android:id="@+id/calendarFragment"
         android:name="com.example.to_dolist.ui.fragments.CalendarFragment"
         android:label="@string/calendar"
-        tools:layout="@layout/fragment_calendar" >
+        tools:layout="@layout/fragment_calendar">
         <action
             android:id="@+id/action_calendarFragment_to_itemTask"
             app:destination="@id/itemTask" />
@@ -35,7 +35,7 @@
     <fragment
         android:id="@+id/starTaskFragment"
         android:name="com.example.to_dolist.ui.fragments.StarTaskFragment"
-        android:label="StarTaskFragment"
+        android:label="Star Task"
         tools:layout="@layout/fragment_star_task">
         <action
             android:id="@+id/action_starTaskFragment_to_itemTask"
@@ -48,13 +48,17 @@
     <fragment
         android:id="@+id/itemTask"
         android:name="com.example.to_dolist.ui.fragments.ItemTaskFragment"
-        android:label="ItemTask"
-        tools:layout="@layout/fragment_item_task" />
+        android:label=""
+        tools:layout="@layout/fragment_item_task" >
+        <argument
+            android:name="Task"
+            app:argType="com.example.to_dolist.models.Task" />
+    </fragment>
     <fragment
         android:id="@+id/finishTaskFragment"
         android:name="com.example.to_dolist.ui.fragments.FinishTaskFragment"
-        android:label="FinishTaskFragment"
-        tools:layout="@layout/fragment_finish_task" >
+        android:label="Nhiệm vụ hoàn thành"
+        tools:layout="@layout/fragment_finish_task">
         <action
             android:id="@+id/action_finishTaskFragment_to_itemTask"
             app:destination="@id/itemTask" />

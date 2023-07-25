@@ -1,38 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/back_ground_fragment">
 
     <EditText
         android:id="@+id/edtTitleTask"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/conner_radius_top_left_top_right_8"
+        android:elevation="1.5dp"
         android:fontFamily="@font/roboto_medium"
         android:hint="@string/title"
-        android:textSize="25sp"
-        android:textStyle="bold"
+        android:importantForAutofill="no"
+        android:inputType="textMultiLine"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/black"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:inputType="textCapSentences|textMultiLine"
-        android:importantForAutofill="no" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/edtDescription"
         android:layout_width="match_parent"
-        android:layout_marginTop="8dp"
         android:layout_height="wrap_content"
-        android:textColor="@color/black"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/conner_radius_bottom_left_bottom_right_8"
         android:fontFamily="@font/roboto_medium"
+        android:gravity="top"
         android:hint="@string/description"
-        android:textSize="20sp"
-        android:textStyle="bold"
+        android:importantForAutofill="no"
+        android:inputType="textCapSentences|textMultiLine"
+        android:minLines="20"
+        android:paddingStart="10dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="8dp"
+        android:alpha="0.6"
+        android:text=""
+        android:textColor="@color/black"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edtTitleTask"
-        android:inputType="textCapSentences|textMultiLine"
-        android:importantForAutofill="no" />
-    
+        app:layout_constraintTop_toBottomOf="@id/edtTitleTask" />
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/conner_radius_item_task_8dp"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/edtDescription">
+
+        <ImageView
+            android:id="@+id/imvDate"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="6dp"
+            android:alpha="0.5"
+            android:importantForAccessibility="no"
+            android:src="@drawable/outline_calendar_month_black_36"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="19dp"
+            android:layout_toEndOf="@id/imvDate"
+            android:text="Ngày bắt đầu"
+            android:textColor="#626060"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imvDate"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/conner_radius_item_task_date_8dp"
+            android:padding="6dp"
+            android:text="30/06/2001"
+            android:textColor="#626060"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/conner_radius_item_task_8dp"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutDate">
+
+        <ImageView
+            android:id="@+id/imvTime"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="6dp"
+            android:alpha="0.5"
+            android:importantForAccessibility="no"
+            android:src="@drawable/outline_time_black_36"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/alarmTime"
+            android:textColor="#626060"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imvTime"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/conner_radius_item_task_date_8dp"
+            android:padding="6dp"
+            android:text="20:20"
+            android:textColor="#626060"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/layoutRepeatTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="12dp"
+        android:background="@drawable/conner_radius_item_task_8dp"
+        android:gravity="center_vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/layoutTime">
+
+        <ImageView
+            android:id="@+id/imvRepeatTask"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_marginStart="6dp"
+            android:alpha="0.5"
+            android:importantForAccessibility="no"
+            android:src="@drawable/outline_repeat_task_black_36"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:text="@string/repeat_task"
+            android:textColor="#626060"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/imvRepeatTask"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tvRepeatTask"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:background="@drawable/conner_radius_item_task_date_8dp"
+            android:padding="6dp"
+            android:text="Không"
+            android:textColor="#626060"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

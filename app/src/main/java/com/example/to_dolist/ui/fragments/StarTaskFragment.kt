@@ -1,16 +1,16 @@
 package com.example.to_dolist.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.to_dolist.R
 import com.example.to_dolist.adapters.AdapterRecycleView
 import com.example.to_dolist.databinding.ActivityMainBinding
 import com.example.to_dolist.databinding.FragmentStarTaskBinding
 import com.example.to_dolist.ui.MainActivity
+import com.example.to_dolist.utils.Constance.TAG_INTENT_TASK
 import com.example.to_dolist.viewmodel.TaskViewModel
 
 class StarTaskFragment : Fragment(R.layout.fragment_star_task) {
@@ -34,17 +34,18 @@ class StarTaskFragment : Fragment(R.layout.fragment_star_task) {
 
     override fun onStart() {
         super.onStart()
-        viewModel.getTaskMountStar(true).observe(viewLifecycleOwner, Observer {
+        viewModel.getTaskMountStar(true).observe(viewLifecycleOwner) {
             adapterRecycleView.submitList(it)
-        })
+        }
     }
 
     override fun onResume() {
         super.onResume()
 
-        adapterRecycleView.setOnItemClickListener { task ->
+        adapterRecycleView.setOnClickItemListener { task ->
             val bundle = Bundle()
-            bundle.putSerializable("task", task)
+            bundle.putSerializable(TAG_INTENT_TASK, task)
+            findNavController().navigate(R.id.action_starTaskFragment_to_itemTask, bundle)
         }
 
         adapterRecycleView.setOnClickStarListener { task ->

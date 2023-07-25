@@ -67,6 +67,12 @@ class AdapterRecycleView(private val context: Context) :
                 binding.ivStar.setImageResource(imageStarResource)
             }
 
+            if(task.alarm) {
+                binding.tvTime.visibility = View.VISIBLE
+            } else {
+                binding.tvTime.visibility = View.GONE
+            }
+
             binding.apply {
                 tvTitleTask.text = task.titleTask
                 tvTitleTask.paint.isStrikeThruText = task.finish
@@ -102,7 +108,7 @@ class AdapterRecycleView(private val context: Context) :
 
     private var onItemClickListener: ((Task) -> Unit)? = null
 
-    fun setOnItemClickListener(listener: (Task) -> Unit) {
+    fun setOnClickItemListener(listener: (Task) -> Unit) {
         onItemClickListener = listener
     }
 
