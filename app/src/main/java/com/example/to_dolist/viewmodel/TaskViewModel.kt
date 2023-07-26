@@ -22,7 +22,7 @@ class TaskViewModel(
         repo.updateTask(task)
     }
 
-    fun getUnFinishTask(isCheck: Boolean) = repo.getUnFinishTask(isCheck)
+    fun getTask(isFinish: Boolean) = repo.getUnFinishTask(isFinish)
 
     fun getTaskMountStar(isStar: Boolean) = repo.getTaskMountStar(isStar)
 

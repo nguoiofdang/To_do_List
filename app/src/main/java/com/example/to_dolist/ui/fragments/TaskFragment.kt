@@ -1,16 +1,12 @@
 package com.example.to_dolist.ui.fragments
 
-import android.app.AlarmManager
+
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.PendingIntent
-import android.app.TimePickerDialog
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.view.Window
@@ -23,13 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.to_dolist.R
 import com.example.to_dolist.adapters.AdapterRecycleView
-import com.example.to_dolist.broadcast.NotificationBroadcastReceiver
 import com.example.to_dolist.databinding.FragmentTaskBinding
 import com.example.to_dolist.databinding.*
-import com.example.to_dolist.models.Notification
+import com.example.to_dolist.feature.AlarmSchedulerTask
 import com.example.to_dolist.models.Task
 import com.example.to_dolist.ui.MainActivity
-import com.example.to_dolist.utils.Constance.KEY_NOTIFICATION_TO_BROADCAST_RECEIVER
 import com.example.to_dolist.utils.Constance.TAG_INTENT_TASK
 import com.example.to_dolist.viewmodel.TaskViewModel
 import com.google.android.material.snackbar.Snackbar
@@ -43,6 +37,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
     private val binding get() = _binding!!
     private lateinit var rvTaskAdapter: AdapterRecycleView
     private var newTask: Task = Task()
+    private lateinit var scheduler: AlarmSchedulerTask
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +52,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             }
             findNavController().navigate(R.id.action_taskFragment_to_itemTask, bundle)
         }
+        scheduler = AlarmSchedulerTask(requireContext())
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -66,16 +62,14 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         setupRecycleView()
         swipeDeleteTask(view)
 
-        viewModel.getUnFinishTask(false).observe(viewLifecycleOwner) {
+        viewModel.getTask(false).observe(viewLifecycleOwner) {
             if (it.isEmpty()) {
                 binding.ivEmptyTask.visibility = View.VISIBLE
             } else {
-                /*binding.rvTaskFragment.visibility = View.VISIBLE*/
                 binding.ivEmptyTask.visibility = View.GONE
             }
             rvTaskAdapter.submitList(it)
         }
-        Log.e("pass", "onViewCreated Fragment")
     }
 
     override fun onStart() {
@@ -93,6 +87,7 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
         }
 
         rvTaskAdapter.setOnClickFinishListener { task ->
+            scheduler.cancel(task)
             viewModel.updateTask(
                 task.copy(
                     finish = !task.finish
@@ -139,16 +134,10 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
             calendar.set(Calendar.YEAR, newTask.year!!)
             calendar.set(Calendar.MONTH, newTask.month!! - 1)
             calendar.set(Calendar.DAY_OF_MONTH, newTask.day!!)
-            /*calendar.set(Calendar.HOUR_OF_DAY, newTask.hour!!)
-            calendar.set(Calendar.MINUTE, newTask.minute!!)*/
 
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
             val selectedDateString = dateFormat.format(calendar.time)
             tvDate.text = selectedDateString
-
-            /*val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-            val selectedTimeString = timeFormat.format(calendar.time)
-            tvTime.text = selectedTimeString*/
         }
 
         dialogBinding.tvDate.setOnClickListener {
@@ -229,8 +218,14 @@ class TaskFragment : Fragment(R.layout.fragment_task) {
                 val position = viewHolder.layoutPosition
                 val task = rvTaskAdapter.currentList[position]
                 viewModel.deleteTask(task)
+                if (task.alarm) {
+                    scheduler.cancel(task)
+                }
                 Snackbar.make(view, "Xoá nhiệm vụ thành công", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo") {
+                        if(task.alarm) {
+                            scheduler.scheduler(task)
+                        }
                         viewModel.insertTask(task)
                     }
                 }.show()

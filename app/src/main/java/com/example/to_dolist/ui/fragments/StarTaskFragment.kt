@@ -9,6 +9,7 @@ import com.example.to_dolist.R
 import com.example.to_dolist.adapters.AdapterRecycleView
 import com.example.to_dolist.databinding.ActivityMainBinding
 import com.example.to_dolist.databinding.FragmentStarTaskBinding
+import com.example.to_dolist.feature.AlarmSchedulerTask
 import com.example.to_dolist.ui.MainActivity
 import com.example.to_dolist.utils.Constance.TAG_INTENT_TASK
 import com.example.to_dolist.viewmodel.TaskViewModel
@@ -21,6 +22,7 @@ class StarTaskFragment : Fragment(R.layout.fragment_star_task) {
     private val binding get() = _binding!!
     private lateinit var adapterRecycleView: AdapterRecycleView
     private lateinit var viewModel: TaskViewModel
+    private lateinit var scheduler: AlarmSchedulerTask
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -28,7 +30,7 @@ class StarTaskFragment : Fragment(R.layout.fragment_star_task) {
         _activityMainBinding = (activity as MainActivity).binding
         viewModel = (activity as MainActivity).viewModel
         activityMainBinding.bottomNavigation.visibility = View.GONE
-
+        scheduler = AlarmSchedulerTask(requireContext())
         setupAdapterRecycleView()
     }
 
@@ -55,6 +57,11 @@ class StarTaskFragment : Fragment(R.layout.fragment_star_task) {
         }
 
         adapterRecycleView.setOnClickFinishListener { task ->
+            if (task.alarm == true and !task.finish) {
+                scheduler.cancel(task)
+            } else if (task.alarm == true and task.finish) {
+                scheduler.scheduler(task)
+            }
             viewModel.updateTask(task.copy(
                 finish = !task.finish
             ))

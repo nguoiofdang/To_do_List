@@ -10,6 +10,7 @@ import com.example.to_dolist.R
 import com.example.to_dolist.adapters.AdapterRecycleView
 import com.example.to_dolist.databinding.ActivityMainBinding
 import com.example.to_dolist.databinding.FragmentFinishTaskBinding
+import com.example.to_dolist.feature.AlarmSchedulerTask
 import com.example.to_dolist.ui.MainActivity
 import com.example.to_dolist.utils.Constance.TAG_INTENT_TASK
 import com.example.to_dolist.viewmodel.TaskViewModel
@@ -22,6 +23,7 @@ class FinishTaskFragment : Fragment(R.layout.fragment_finish_task) {
     private val activityMainBinding get() = _activityMainBinding!!
     private lateinit var viewModel: TaskViewModel
     private lateinit var adapterRecycleView: AdapterRecycleView
+    private lateinit var scheduler: AlarmSchedulerTask
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -29,16 +31,20 @@ class FinishTaskFragment : Fragment(R.layout.fragment_finish_task) {
         viewModel = (activity as MainActivity).viewModel
         _activityMainBinding = (activity as MainActivity).binding
         activityMainBinding.bottomNavigation.visibility = View.GONE
+        scheduler = AlarmSchedulerTask(requireContext())
         setupRecycleView()
     }
 
     override fun onStart() {
         super.onStart()
-        viewModel.getUnFinishTask(true).observe(viewLifecycleOwner, Observer {
+        viewModel.getTask(true).observe(viewLifecycleOwner, Observer {
             adapterRecycleView.submitList(it)
         })
 
         adapterRecycleView.setOnClickFinishListener { task->
+            if (task.alarm) {
+                scheduler.scheduler(task)
+            }
             viewModel.updateTask(task.copy(
                 finish = !task.finish
             ))

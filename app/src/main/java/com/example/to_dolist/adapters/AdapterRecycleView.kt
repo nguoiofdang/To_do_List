@@ -10,9 +10,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.to_dolist.databinding.ItemRecylcleViewBinding
 import com.example.to_dolist.models.Task
 import com.example.to_dolist.utils.Constance.IMAGE_FINISH_TASK
-import com.example.to_dolist.utils.Constance.IMAGE_STAR_TASK
+import com.example.to_dolist.utils.Constance.IC_STAR_IMPORTANT
 import com.example.to_dolist.utils.Constance.IMAGE_UN_FINISH_TASK
-import com.example.to_dolist.utils.Constance.IMAGE_UN_STAR_TASK
+import com.example.to_dolist.utils.Constance.IC_STAR_NOT_IMPORTANT
 import com.example.to_dolist.utils.Constance.VALUE_ALPHA_FINISH_TASK
 import com.example.to_dolist.utils.Constance.VALUE_ALPHA_UN_FINISH_TASK
 
@@ -53,14 +53,14 @@ class AdapterRecycleView(private val context: Context) :
             }
             if (task.star) {
                 val imageStarResource = context.resources.getIdentifier(
-                    IMAGE_STAR_TASK,
+                    IC_STAR_IMPORTANT,
                     "drawable",
                     context.packageName
                 )
                 binding.ivStar.setImageResource(imageStarResource)
             } else {
                 val imageStarResource = context.resources.getIdentifier(
-                    IMAGE_UN_STAR_TASK,
+                    IC_STAR_NOT_IMPORTANT,
                     "drawable",
                     context.packageName
                 )

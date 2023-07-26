@@ -8,7 +8,10 @@ import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.example.to_dolist.R
 import com.example.to_dolist.ui.MainActivity
+import com.example.to_dolist.utils.Constance
 import com.example.to_dolist.utils.Constance.CHANEL_ID_PIN_REMINDER
+import com.example.to_dolist.utils.Constance.CHANEL_ID_TODO_REMINDER
+import com.example.to_dolist.utils.Constance.ID_GROUP
 
 class NotificationService : Service() {
     override fun onBind(intent: Intent?): IBinder? {
@@ -31,6 +34,7 @@ class NotificationService : Service() {
             .setSmallIcon(R.drawable.ic_app)
             .setContentIntent(pendingIntent)
             .setSound(null)
+            .setGroup(ID_GROUP)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setOngoing(true)
             .setSilent(true)

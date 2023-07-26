@@ -2,7 +2,6 @@ package com.example.to_dolist.ui.fragments
 
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.TimePickerDialog
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -18,6 +17,7 @@ import com.example.to_dolist.R
 import com.example.to_dolist.adapters.AdapterRecycleView
 import com.example.to_dolist.databinding.AddTaskDialogBinding
 import com.example.to_dolist.databinding.FragmentCalendarBinding
+import com.example.to_dolist.feature.AlarmSchedulerTask
 import com.example.to_dolist.models.*
 import com.example.to_dolist.models.Date
 import com.example.to_dolist.ui.MainActivity
@@ -36,6 +36,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
     private lateinit var rvTaskAdapter: AdapterRecycleView
     private var newTask = Task()
     private var dateSelected = Date()
+    private lateinit var scheduler: AlarmSchedulerTask
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -133,7 +134,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         dialogBinding.apply {
             val calendar = Calendar.getInstance()
             calendar.set(Calendar.YEAR, newTask.year!!)
-            calendar.set(Calendar.MONTH, newTask.month!!)
+            calendar.set(Calendar.MONTH, newTask.month!! - 1)
             calendar.set(Calendar.DAY_OF_MONTH, newTask.day!!)
 
             val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
@@ -146,7 +147,6 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         }
 
         dialogBinding.btnDoneAddTask.setOnClickListener {
-
             if (dialogBinding.edtTitleTask.text.toString().isNotEmpty()) {
                 newTask.titleTask = dialogBinding.edtTitleTask.text.toString().trim()
                 viewModel.insertTask(newTask)
@@ -190,9 +190,9 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private fun setDate(dialogBinding: AddTaskDialogBinding) {
         val calendar = Calendar.getInstance()
-        val year = newTask.year
-        val month = newTask.month
-        val day = newTask.day
+        val year = newTask.year!!
+        val month = newTask.month!! - 1
+        val day = newTask.day!!
 
         val datePickerDialog = DatePickerDialog(
             requireContext(),
@@ -207,7 +207,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 val dateFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
                 val selectedDateString = dateFormat.format(calendar.time)
                 dialogBinding.tvDate.text = selectedDateString
-            }, year!!, month!!, day!!
+            }, year, month, day
         )
         datePickerDialog.show()
     }
@@ -229,8 +229,14 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 val position = viewHolder.layoutPosition
                 val task = rvTaskAdapter.currentList[position]
                 viewModel.deleteTask(task)
+                if (task.alarm) {
+                    scheduler.cancel(task)
+                }
                 Snackbar.make(view, "Xoá nhiệm vụ thành công", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo") {
+                        if (task.alarm) {
+                            scheduler.scheduler(task)
+                        }
                         viewModel.insertTask(task)
                     }
                 }.show()

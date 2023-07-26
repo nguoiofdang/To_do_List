@@ -1,12 +1,8 @@
 package com.example.to_dolist.ui.fragments
 
-import android.app.AlarmManager
 import android.app.DatePickerDialog
 import android.app.Dialog
-import android.app.PendingIntent
 import android.app.TimePickerDialog
-import android.content.Context.ALARM_SERVICE
-import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Build
@@ -19,14 +15,12 @@ import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
 import com.example.to_dolist.R
-import com.example.to_dolist.broadcast.NotificationBroadcastReceiver
 import com.example.to_dolist.databinding.ActivityMainBinding
 import com.example.to_dolist.databinding.FragmentItemTaskBinding
 import com.example.to_dolist.databinding.SetTimeDialogBinding
+import com.example.to_dolist.feature.AlarmSchedulerTask
 import com.example.to_dolist.models.Task
 import com.example.to_dolist.ui.MainActivity
-import com.example.to_dolist.utils.Constance.KEY_NOTIFICATION_TO_BROADCAST_RECEIVER
-import com.example.to_dolist.utils.Constance.TAG_INTENT_TASK
 import com.example.to_dolist.viewmodel.TaskViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -39,7 +33,9 @@ class ItemTaskFragment : Fragment(R.layout.fragment_item_task) {
     private val bindingMainActivity get() = _bindingMainActivity!!
     private lateinit var viewModel: TaskViewModel
     private lateinit var editTask: Task
+    private lateinit var scheduler: AlarmSchedulerTask
     private val args: ItemTaskFragmentArgs by navArgs()
+    private var isFinish = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -53,11 +49,10 @@ class ItemTaskFragment : Fragment(R.layout.fragment_item_task) {
         } else {
             requireArguments().getSerializable(TAG_INTENT_TASK) as Task
         }*/
-
+        scheduler = AlarmSchedulerTask(requireContext())
+        isFinish = requireArguments().getBoolean("isFinish", false)
         editTask = args.Task
-        val isFinish = requireArguments().getBoolean("isFinish", false)
-
-        setDateForView(isFinish)
+        setDateForView()
     }
 
     override fun onResume() {
@@ -79,13 +74,17 @@ class ItemTaskFragment : Fragment(R.layout.fragment_item_task) {
 
     override fun onDestroy() {
         super.onDestroy()
-        scheduleNotification(editTask)
+        if (editTask.alarm == true and !isFinish) {
+            scheduler.scheduler(editTask)
+        } else if (editTask.alarm == false and !isFinish) {
+            scheduler.cancel(editTask)
+        }
         bindingMainActivity.bottomNavigation.visibility = View.VISIBLE
         _binding = null
         _bindingMainActivity = null
     }
 
-    private fun setDateForView(isFinish: Boolean) {
+    private fun setDateForView() {
         if (isFinish) {
             binding.apply {
                 edtTitleTask.isEnabled = false
@@ -256,7 +255,7 @@ class ItemTaskFragment : Fragment(R.layout.fragment_item_task) {
         dialog.show()
     }
 
-    private fun scheduleNotification(task: Task) {
+    /*private fun scheduleNotification(task: Task) {
 
         val intent = Intent(context, NotificationBroadcastReceiver::class.java).apply {
             putExtra(KEY_NOTIFICATION_TO_BROADCAST_RECEIVER, task)
@@ -285,5 +284,5 @@ class ItemTaskFragment : Fragment(R.layout.fragment_item_task) {
         } else {
             alarmManager?.cancel(pendingIntent)
         }
-    }
+    }*/
 }
