@@ -21,10 +21,10 @@ class Repository(
         db.taskDao.getTaskMountStar(isStar)
 
     fun getTaskOfTheDay(
-        isCheck: Boolean,
+        isFinish: Boolean,
         daySelected: Int,
         monthSelected: Int,
         yearSelected: Int
     ): LiveData<List<Task>> =
-        db.taskDao.getTaskOfTheDay(isCheck, daySelected, monthSelected, yearSelected)
+        db.taskDao.getTaskOfTheDay(isFinish, daySelected, monthSelected, yearSelected)
 }

@@ -22,9 +22,9 @@ interface TaskDao {
     @Query("SELECT * FROM task WHERE star=:isStar")
     fun getTaskMountStar(isStar: Boolean): LiveData<List<Task>>
 
-    @Query("SELECT * FROM task WHERE finish=:isCheck AND day=:daySelected AND month=:monthSelected AND year=:yearSelected")
+    @Query("SELECT * FROM task WHERE finish=:isFinish AND day=:daySelected AND month=:monthSelected AND year=:yearSelected")
     fun getTaskOfTheDay(
-        isCheck: Boolean,
+        isFinish: Boolean,
         daySelected: Int,
         monthSelected: Int,
         yearSelected: Int

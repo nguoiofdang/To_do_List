@@ -27,7 +27,6 @@ import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private var _binding: FragmentCalendarBinding? = null
@@ -47,26 +46,42 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
         setupRecycleView()
         swipeDeleteTask(view)
         currentCalendar()
+        viewModel.setDateSelected(dateSelected)
+        viewModel.list.observe(viewLifecycleOwner) {
+            Log.e("date", it.toString() + "Fragment")
 
-        viewModel.getTaskOfTheDay(false, dateSelected.day, dateSelected.month, dateSelected.year)
+            if (it.isEmpty()) {
+                binding.tvEmptyTaskOnDay.visibility = View.VISIBLE
+                binding.rvTask.visibility = View.GONE
+            } else {
+                binding.tvEmptyTaskOnDay.visibility = View.GONE
+                binding.rvTask.visibility = View.VISIBLE
+                rvTaskAdapter.submitList(it)
+            }
+        }
+        /*getListTaskOfDay(dateSelected.day, dateSelected.month, dateSelected.year)*/
+
+        /*viewModel.getTaskOfTheDay(false, dateSelected.day, dateSelected.month, dateSelected.year)
             .observe(viewLifecycleOwner) {
-                Log.e("view", "ben ngoai")
                 if (it.isEmpty()) {
+                    Log.e("data", dateSelected.toString() + "list")
                     binding.tvEmptyTaskOnDay.visibility = View.VISIBLE
                     binding.rvTask.visibility = View.GONE
                 } else {
+                    Log.e("data", dateSelected.toString() + "list")
                     binding.tvEmptyTaskOnDay.visibility = View.GONE
                     binding.rvTask.visibility = View.VISIBLE
                     rvTaskAdapter.submitList(it)
                 }
-            }
+            }*/
     }
 
     override fun onStart() {
         super.onStart()
 
         binding.calendarView.setOnDateChangeListener { _, year, month, dayOfMonth ->
-            viewModel.getTaskOfTheDay(false, dayOfMonth, month + 1, year)
+
+            /*viewModel.getTaskOfTheDay(false, dayOfMonth, month + 1, year)
                 .observe(viewLifecycleOwner) {
                     if (it.isEmpty()) {
                         binding.tvEmptyTaskOnDay.visibility = View.VISIBLE
@@ -76,12 +91,13 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                         binding.rvTask.visibility = View.VISIBLE
                         rvTaskAdapter.submitList(it)
                     }
-                }
+                }*/
             dateSelected.apply {
                 this.year = year
                 this.month = month + 1
                 this.day = dayOfMonth
             }
+            viewModel.setDateSelected(dateSelected)
         }
 
         rvTaskAdapter.setOnClickItemListener {
@@ -151,7 +167,7 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
                 newTask.titleTask = dialogBinding.edtTitleTask.text.toString().trim()
                 viewModel.insertTask(newTask)
                 dialogBinding.edtTitleTask.text.clear()
-                Toast.makeText(requireContext(), "via", Toast.LENGTH_SHORT)
+                Toast.makeText(requireContext(), "Thêm nhiệm vụ thành công", Toast.LENGTH_SHORT)
                     .show()
             } else {
                 Toast.makeText(requireContext(), "Vui lòng nhập công việc", Toast.LENGTH_SHORT)
@@ -172,14 +188,11 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
 
     private fun currentCalendar() {
         val calendar = Calendar.getInstance()
-        newTask.apply {
+        /*newTask.apply {
             year = calendar.get(Calendar.YEAR)
             month = calendar.get(Calendar.MONTH) + 1
             day = calendar.get(Calendar.DAY_OF_MONTH)
-            hour = calendar.get(Calendar.HOUR_OF_DAY)
-            minute = calendar.get(Calendar.MINUTE)
-
-        }
+        }*/
         dateSelected.apply {
             year = calendar.get(Calendar.YEAR)
             month = calendar.get(Calendar.MONTH) + 1
@@ -243,8 +256,21 @@ class CalendarFragment : Fragment(R.layout.fragment_calendar) {
             }
 
         }
-
         ItemTouchHelper(itemTouchHelperCallback).attachToRecyclerView(binding.rvTask)
     }
 
+/*    private fun getListTaskOfDay(dayOfMonth: Int, month: Int, year: Int) {
+        Log.e("data", dateSelected.toString())
+        viewModel.getTaskOfTheDay(false, dayOfMonth, month, year)
+            .observe(viewLifecycleOwner) {
+                if (it.isEmpty()) {
+                    binding.tvEmptyTaskOnDay.visibility = View.VISIBLE
+                    binding.rvTask.visibility = View.GONE
+                } else {
+                    binding.tvEmptyTaskOnDay.visibility = View.GONE
+                    binding.rvTask.visibility = View.VISIBLE
+                    rvTaskAdapter.submitList(it)
+                }
+            }
+    }*/
 }
